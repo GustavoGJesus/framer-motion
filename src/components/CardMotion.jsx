@@ -1,5 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 
+import '../styles/cardMotion.css'
+
 
 export default function CardMotion(){
     const [data, setData] = useState([]);
