@@ -1,5 +1,5 @@
 import React from 'react';
-import { CardMotion } from './components/CardMotion'
+import  CardMotion  from './components/CardMotion'
 
 function App() {
   return (

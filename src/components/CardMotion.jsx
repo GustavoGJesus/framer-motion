@@ -1,34 +1,47 @@
-import * as React from "react"
-import { motion, useCycle } from "framer-motion"
+import { useEffect, useState, useRef } from "react";
 
-/**
- * An example of animating the boxShadow property.
- */
 
-const style = {
-    width: 100,
-    height: 600,
-    background: "white",
-    opacity: 1,
-    boxShadow: "5px 5px 50px #000",
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center", 
-    alignItems: "center",
-}
+export default function CardMotion(){
+    const [data, setData] = useState([]);
+    const carousel = useRef(null);
+    
+    useEffect(() => {
+        fetch('http://localhost:3000/static/cards.json')
+        .then((response) => response.json())
+        .then(setData)
+    }, []);
 
-export const CardMotion = () => {
-    const [elevation, cycle] = useCycle(
-        { boxShadow: "5px 5px 50px #152486" },
-        { boxShadow: "5px 5px 5px #000" }
-    )
+    const handleLeftClick = (e) => {
+        e.preventDefault();
+        carousel.current.scrollLeft -= carousel.current.offsetWidth;
+    };
 
-    return (
-        <motion.div
-            animate={elevation}
-            transition={{ duration: 2 }}
-            onTap={() => cycle()}
-            style={style}
-        />
-    )
-}
+    const handleRightClick = (e) => {
+        e.preventDefault();
+
+        carousel.current.scrollLeft += carousel.current.offsetWidth;
+    };
+
+    if (!data || !data.length) return null;
+
+    return(
+        <div className="container">
+            <div className="carousel" ref={carousel}>
+                {data.map((item) => {
+                    const{id, name, description, image} = item;
+                    return(
+                        <div className="item" key={id}>
+                            <div className="image">
+                                <img src={image} alt={name} />
+                            </div>
+                            <div className="info">
+                                <span className="name">{name}</span>
+                                <span className="description">{description}</span>
+                            </div>
+                        </div>
+                    )
+                })}
+            </div>
+        </div>
+    );
+};
